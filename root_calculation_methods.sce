@@ -81,17 +81,18 @@ function fixed_point(func, x, maxn, tol)
     end
 endfunction
 
-  // PARA O METODO DE NEWTON:
-    // Caso 1: f" > 0 e (f(a) < 0 e f(b) > 0) --> x0 = b
-    // Caso 2: f" > 0 e (f(a) > 0 e f(b) < 0) --> x0 = a
-    // Caso 3: f" < 0 e (f(a) < 0 e f(b) > 0) --> x0 = a
-    // Caso 4: f" < 0 e (f(a) > 0 e f(b) < 0) --> x0 = b
-    // x0 é a ou b tal que f(x0) * f"(x0) > 0
+  // FOR NEWTON-RAPHSON METHOD:
+    // Case 1: f" > 0 e (f(a) < 0 e f(b) > 0) --> x0 = b
+    // Case 2: f" > 0 e (f(a) > 0 e f(b) < 0) --> x0 = a
+    // Case 3: f" < 0 e (f(a) < 0 e f(b) > 0) --> x0 = a
+    // Case 4: f" < 0 e (f(a) > 0 e f(b) < 0) --> x0 = b
+    // x0 equals a or b such as f(x0) * f"(x0) > 0
 
 function newton_raphson(func, deriv, x, maxn, tol)
     xn = x
     n = 1
     h = (func(xn)/deriv(xn))
+    disp("Iteration; xn; f(xn)/g(xn);")
     while (abs(h) >= tol && n < maxn) do
         h = (func(xn)/deriv(xn))
         xn = xn - h
@@ -102,9 +103,24 @@ function newton_raphson(func, deriv, x, maxn, tol)
         disp(n, "Number of iterations:")
 endfunction
 
-//function secant(func, x, maxn, tol)
-//    xn = x
-//    n = 1
-//    
-//    xn = 
-//endfunction
+function secant(func, x0, x1, maxn, tol)
+    n = 1
+    xn2 = x0
+    xn1 = x1 
+    xn = (xn2 * func(xn1) - xn1*func(xn2)) / (func(xn1) - func(xn2))
+    disp("Iteration; xn+1; xn; xn-1;")
+    
+    while (abs(func(xn)) > tol && n < maxn) do
+        xn2 = xn1;
+        xn1 = xn;
+        xn = (xn2 * func(xn1) - xn1*func(xn2)) / (func(xn1) - func(xn2))
+        disp([n xn xn1 xn2])
+        n= n + 1
+    end
+    
+    if (n >= maxn) then
+        disp("Root does not exist")
+    else
+        disp(xn, "Root: x = ")
+    end
+endfunction
